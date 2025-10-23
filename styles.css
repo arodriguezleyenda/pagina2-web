@@ -1,40 +1,26 @@
-/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #4caf50; /* Color de respaldo */
-    overflow-x: hidden;
-    background-image: url('fondooo.png'); /* Cambia esto a la ubicación de tu archivo */
-    background-repeat: repeat; /* Repite el patrón */
-    background-size: 30% 30%; /* Ajusta el tamaño del patrón si es necesario */
+    background-color: #4caf50;
+    background-image: url('imagenes/fondooo.png');
+    background-repeat: repeat;
+    background-size: 30% 30%;
 }
 
-/* Estilo base para el header */
 .header {
     background-color: #ff9800;
     position: fixed;
     top: 0;
-    left: 0;
     width: 100%;
-    z-index: 1000;
-    padding: 0% 0%;
-    display: flex; /* Alinea los elementos horizontalmente */
-    justify-content: space-between; /* Espacia entre el logo, la búsqueda y el menú */
-    align-items: center; /* Alinea los elementos verticalmente */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
 }
 
-body.no-scroll {
-    overflow: hidden;
-}
-  
-
-/* Logo ajustable */
 .logo {
     display: flex;
     align-items: center;
-    flex-shrink: 0; /* Evita que el logo se reduzca */
 }
 
 .logo img {
@@ -42,51 +28,41 @@ body.no-scroll {
     width: auto;
 }
 
-/* Contenedor para la barra de búsqueda */
 .search-container {
     display: flex;
     align-items: center;
-    position: relative; /* Posiciona los elementos hijos respecto al contenedor */
-    flex-grow: 1;
-    max-width: 30%; /* Asegura que ocupe el ancho completo */
-    padding: 0;
+    position: relative;
+    flex-grow: 1;  /*crece ocupando el espacio disponible*/
+    max-width: 30%;
 }
 
-/* Ícono de búsqueda (ahora un botón funcional) */
 .search-icon {
     position: absolute;
     font-size: 1rem;
     color: gray;
-    right: 10px; /* Ícono en el extremo derecho del contenedor */
-    top: 50%; /* Centrado verticalmente */
-    transform: translateY(-50%);
-    background: none; /* Elimina fondo adicional */
-    border: none;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%); /*centra el icono verticalmente*/
     cursor: pointer;
-    z-index: 1;
-    padding: 0;
 }
 
-/* Campo de entrada */
 #search-input {
     flex: 1;
     border: none;
-    width: 100%; /* Ocupa el ancho completo del contenedor */
+    width: 100%; 
     outline: none;
-    padding: 10px 40px 10px 10px; /* Espacio adicional para el ícono */
+    padding: 10px 40px 10px 10px; 
     font-size: 1rem;
     border-radius: 5px;
-    box-sizing: border-box; /* Evita que el padding afecte el tamaño */
+    box-sizing: border-box;
 }
 
-/* Ícono de hamburguesa */
 .menu-icon {
-    display: none; /* Oculto por defecto en pantallas grandes */
+    display: none; 
     font-size: 1.5rem;
     cursor: pointer;
 }
 
-/* Menú de navegación */
 .nav {
     display: flex;
     gap: 20px;
@@ -104,7 +80,6 @@ body.no-scroll {
     display: block;
 }
 
-/* Menú de navegación */
 .nav ul {
     list-style: none;
     display: flex;
@@ -151,10 +126,10 @@ body.no-scroll {
 }
 
 .modal img {
-    max-width: 80%; /* Reduce el ancho máximo al 80% del contenedor */
-    height: auto; /* Mantiene la proporción de la imagen */
-    margin: 0 auto; /* Asegura la centralización horizontal */
-    display: block; /* Hace que se comporte como un bloque */
+    max-width: 80%; 
+    height: auto; 
+    margin: 0 auto; 
+    display: block; 
 }
 
 .sub-menu {
@@ -222,7 +197,6 @@ body.no-scroll {
     }
 }
 
-/* Modal de productos */
 .product-modal {
     display: none;
     position: fixed;
@@ -230,54 +204,43 @@ body.no-scroll {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente */
+    background-color: rgba(0, 0, 0, 0.8);
     justify-content: center;
     align-items: center;
-    z-index: 10000;
-    overflow: hidden; /* IMPORTANTE: sin scroll aquí */
+    z-index: 100;
+
 }
 
-/* Personalización del scrollbar en Webkit (Chrome, Edge, Safari) */
 .product-content::-webkit-scrollbar {
-    width: 8px; /* Ajusta el grosor de la barra */
-}
-
-.product-content::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Color del fondo del track */
+    width: 8px;
+    background: #f1f1f1;
     border-radius: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .product-content::-webkit-scrollbar-thumb {
-    background: #888; /* Color de la barra */
+    background: #888;
     border-radius: 10px;
-    border-left: 3px solid transparent; /* Desplaza la barra un poco a la izquierda */
 }
 
 .product-content::-webkit-scrollbar-thumb:hover {
     background: #555; /* Color cuando se pasa el mouse */
 }
 
-/* Contenido del modal */
 .product-content {
-    background-image: url('fp.png'); /* reemplaza con tu imagen */
-    background-repeat: repeat; /* Repite el patrón */
-    background-size: 80% 100%; /* Ajusta el tamaño del patrón si es necesario */
+    background-image: url('imagenes/fp.png');
+    background-size: 80% 100%;
     text-align: center;
     padding: 20px;
     max-width: 50%;
-    max-height: 80vh; /* Ajusta la altura máxima */
-    overflow-y: auto; /* Permite hacer scroll si los productos son muchos */
-    overflow-x: hidden;   /* oculta el scroll horizontal */
+    max-height: 80vh;
+    overflow-y: auto;
     position: relative;
     box-sizing: border-box; 
-    padding-right: 20px; /* Ajusta el espacio a la derecha para mover la barra */
-
 }
 
 #category-title {
     text-decoration: underline;
+    margin-top: 1px;
 }
 
 .product-images {
@@ -293,6 +256,11 @@ body.no-scroll {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     padding: 10px;
     transition: transform 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .product-item:hover {
@@ -300,12 +268,12 @@ body.no-scroll {
 }
 
 .product-image {
-    background-size: contain; /* Asegura que la imagen se ajuste completamente */
-    background-position: center; /* Centra la imagen */
-    background-repeat: no-repeat; /* Evita repeticiones */
-    width: 100%; /* Asegura que el ancho ocupe el espacio completo */
-    height: auto; /* Permite que la altura sea proporcional */
-    aspect-ratio: 1; /* Define una proporción cuadrada */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
 }
 
 .product-description {
@@ -413,7 +381,6 @@ h2 {
     border-radius: 10px;
     margin-top: 0px;
     margin-bottom: 10%;
-    z-index: 100;
     color: white;
     font-weight: bold;
     margin-bottom: 30px; /* Ajusta el margen inferior según sea necesario */
@@ -461,7 +428,7 @@ button {
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    z-index: 10;
+    z-index: 1;
 }
 
 .prev {
@@ -787,6 +754,190 @@ footer {
     height: auto;
     border-radius: 5px;
     object-fit: cover; /* Asegura que la imagen mantenga su aspecto */
+}
+
+.cart-icon {
+    position: absolute;
+    top: 15px;
+    right: 20px; /* Extremo derecho */
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: white;
+}
+
+#cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+}
+
+/* --- PANEL LATERAL DEL CARRITO --- */
+.cart-modal {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Oculto inicialmente */
+    width: 340px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -3px 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    transition: right 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-modal.active {
+    right: 0; /* Se desliza hacia dentro */
+}
+
+/* --- Contenedor general dentro del carrito --- */
+.cart-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* --- Título --- */
+.cart-content h2 {
+    color: darkgreen;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* --- Lista de productos (con scroll independiente) --- */
+#cart-items {
+    flex: 1;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+/* --- Cada producto del carrito --- */
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-image {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-item-text {
+    flex: 1;
+    font-size: 0.9rem;
+    color: #333;
+    text-align: left;
+}
+
+/* --- Botón eliminar producto individual --- */
+.remove-btn {
+    background: none;
+    border: none;
+    color: #a40000;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.remove-btn:hover {
+    color: #ff0000;
+}
+
+/* --- Contenedor de botones (fijo al fondo) --- */
+.cart-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid #ccc;
+}
+
+/* --- Botones principales --- */
+#clear-cart {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+#buy-cart {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+    margin-left: 60%;
+}
+
+#clear-cart {
+    background-color: #a40000;
+    color: white;
+}
+
+#clear-cart:hover {
+    background-color: #cc0000;
+}
+
+#buy-cart {
+    background-color: darkgreen;
+    color: white;
+}
+
+#buy-cart:hover {
+    background-color: #28a745;
+}
+
+/* --- Botón de cierre --- */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    color: #444;
+    cursor: pointer;
+}
+
+/* --- Botón "Agregar al carrito" en los productos --- */
+.add-to-cart {
+    background-color: #ff9800;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    align-self: center;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: darkgreen;
 }
 
 

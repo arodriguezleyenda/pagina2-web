@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farmacia Patagónica</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!--hasta ahora no lo uso-->
 </head>
 
 <body>
-    <!-- Modal de advertencia -->
+    <!-- Modal de advertencia  ESTE MODAL ESTA MAL, DEBERIA APARECER SOLO LUEGO DE BUSCAR UN PRODUCTO-->
     <div id="warning-modal" class="warning-modal">
         <div class="warning-content">
             <span id="close-warning-modal" class="close-btn">&times;</span>
@@ -20,18 +20,27 @@
         </div>
     </div>    
 
-    <!-- Encabezado -->
     <header class="header">
         <div class="logo">
-            <img src="logo.png" alt="Logo">
+            <img src="imagenes/logo.png" alt="Logo">
         </div>
         <div class="search-container">
             <i class="fas fa-search search-icon" id="search-icon"></i>
             <input id="search-input" type="text" placeholder="Buscar productos...">
-        </div>        
-        <div class="menu-icon" id="menu-icon">
-            <i class="fas fa-bars"></i> <!-- Ícono de hamburguesa -->
+        </div>      
+        
+        <div id="cart-modal" class="cart-modal">
+            <div class="cart-content">
+                <span id="close-cart" class="close-btn">&times;</span>
+                <h2>Tu carrito</h2>
+                <ul id="cart-items"></ul>
+                <div class="cart-buttons">
+                    <button id="clear-cart">Vaciar carrito</button>
+                    <button id="buy-cart">Comprar</button>
+                </div>
+            </div>
         </div>
+
         <nav class="nav" id="nav-menu">
             <ul>
                 <li><a href="#inicio">Horario</a></li>
@@ -45,7 +54,6 @@
                             <div class="sub-menu">
                                 <a href="#" data-category="Vitaminas">Vitaminas</a>
                                 <a href="#" data-category="Suplementos">Suplementos</a>
-                                <a href="#" data-category="Todo en Suplementos, Vitaminas y Productos naturales">Todo en Suplementos, Vitaminas y Productos naturales</a>
                             </div>
                         </div>
 
@@ -54,12 +62,10 @@
                             <div class="sub-menu">
                                 <a href="#" data-category="Venda, fajas e inmovilizadores">Venda, fajas e inmovilizadores</a>
                                 <a href="#" data-category="Cremas">Cremas</a>
-                                <a href="#" data-category="Todo en Fitness & Movimiento">Todo en Fitness & Movimiento</a>
                             </div>
                         </div>
                 
                         <a href="#" data-category="Electro medicina">Electro medicina</a>
-                        <a href="#" data-category="Higiene y cuidado personal">Higiene y cuidado personal</a>
 
                         <div class="sub-dropdown">
                             <a href="#" class="sub-dropdown-btn">Accesorios y Regalería ▸</a>
@@ -68,26 +74,32 @@
                                 <a href="#" data-category="Pulseras">Pulseras</a>
                                 <a href="#" data-category="Collares">Collares</a>
                                 <a href="#" data-category="Neceser">Neceser</a>
-                                <a href="#" data-category="Todo en Accesorios y Regalería">Todo en Accesorios y Regalería</a>
                             </div>
                         </div>
-
-                        <a href="#" data-category="Relax">Relax</a>
                     </div>                
                 </li>                
                                 
-                <li><a href="#hablemos-salud">Hablemos de Salud</a></li>
+                <li><a href="hablemosDeSalud.html" target="_blank">Hablemos de Salud</a></li>
                 <li><a href="#" id="open-turnos">Turnos</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
-        </nav>        
+        </nav> 
+        
+        <div class="cart-icon" id="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-count">0</span>
+        </div>
+
+        <div class="menu-icon" id="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
     </header>
     
     <!-- Sección de inicio -->
     <section class="inicio" id="inicio">
         <div class="foto-farmacia">
             <div class="foto-farmacia-background">
-                <img src="farmacia.jpg" alt="Foto de la Farmacia" />
+                <img src="imagenes/farmacia.jpg" alt="Foto de la Farmacia" />
             </div>
         </div>
         <div class="descripcion-container">
@@ -100,7 +112,6 @@
         </div>
     </section>
 
-    <!-- Modal de turnos -->
     <div id="turnos-modal" class="modal">
         <div class="modal-content">
             <span id="close-turnos" class="close-turnos">&times;</span>
@@ -108,86 +119,37 @@
         </div>
     </div>    
 
-    <!-- Modal para productos -->
     <div id="product-modal" class="product-modal">
         <div class="product-content">
             <button class="close-modal">&times;</button>
             <h2 id="category-title">Categoría</h2>
             <div id="product-images" class="product-images">
-                <!-- Los productos se agregarán dinámicamente aquí -->
             </div>
         </div>
     </div>
 
     <div class="promotions-container">
 
-    <!-- Sección de promociones -->
     <section class="promociones" id="promociones">
         <h2>Promociones y Novedades</h2>
         <div class="slider">
             <div class="promocion">
-                <img src="promo1.png" alt="Promoción 1">
+                <img src="imagenes/promo1.png" alt="Promoción 1">
             </div>
             <div class="promocion">
-                <img src="promo2.png" alt="Promoción 2">
+                <img src="imagenes/promo2.png" alt="Promoción 2">
             </div>
             <div class="promocion">
-                <img src="promo3.png" alt="Promoción 3">
+                <img src="imagenes/promo3.png" alt="Promoción 3">
             </div>
             <div class="promocion">
-                <img src="promo4.png" alt="Promoción 4">
+                <img src="imagenes/promo4.png" alt="Promoción 4">
             </div>
         </div>
         <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
         <button class="next" onclick="moveSlide(1)">&#10095;</button>
     </section>
-    
-    <!-- Modal con artículos -->
-    <div class="articles-container" id="articles-container" style="display: none;">
-        <div id="modal-content">
-            <span id="close-articles-modal" style="cursor: pointer;">&times; </span>
-            <h2>Hablemos de Salud</h2>
-            <div id="articles-list">
-                <div class="article-item" id="article-1" data-title="Chia para una vida saludable">
-                    <div class="article-text">
-                        <h3 class="article-title">Chía: Pequeñas Semillas, Grandes Beneficios</h3>
-                        <p class="article-content">
-                            Las semillas de chía son un verdadero superalimento: ricas en omega-3, fibra y antioxidantes, te ayudan a tener más energía, mejorar la digestión y sentirte saciado por más tiempo. Además, favorecen la salud del corazón y la hidratación del cuerpo.
-                            Agrégalas a tus batidos, yogures o ensaladas y disfruta de todos sus beneficios en cada bocado. ¡Nutre tu cuerpo con lo mejor de la naturaleza!</p>
-                    </div>
-                    <img src="chia.jpg" alt="Chia saludable" class="article-image">
 
-                </div>
-                <div class="article-item" id="article-2" data-title="Magnesio">
-                    <div class="article-text">
-                        <h3 class="article-title">Magnesio: El Mineral Esencial para tu Bienestar</h3>
-                        <p class="article-content">
-                            El magnesio es un mineral fundamental para la salud, involucrado en más de 300 funciones en el cuerpo. 
-                            Ayuda a reducir el estrés y la fatiga, mejora la calidad del sueño, fortalece los músculos y huesos, 
-                            y favorece el buen funcionamiento del corazón. Además, contribuye a un metabolismo equilibrado y 
-                            al bienestar mental.
-                        </p>
-                    </div>
-                    <img src="magnesio.jpg" alt="Magnesio" class="article-image">
-                </div>
-                <div class="article-item" id="article-2" data-title="VitaminaD">
-                    <div class="article-text">
-                        <h3 class="article-title">Vitamina D: Clve para huesos fuertes y defensas firmes</h3>
-                        <p class="article-content">
-                            La vitamina D es fundamental para la salud ósea, la función inmunológica y el bienestar general. 
-                            Ayuda en la absorción de calcio y fortalece el sistema inmunológico. 
-                            También está relacionada con la regulación del estado de ánimo y la energía. 
-                            Se obtiene principalmente a través de la exposición al sol y ciertos alimentos, además de estar disponible en suplementos. 
-                            Mantener niveles adecuados de vitamina D es clave para una buena salud.
-                        </p>
-                    </div>
-                    <img src="vitaminaD.jpg" alt="VitaminaD" class="article-image">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sección de contacto -->
     <section class="contacto" id="contacto">
         <div class="contact-container">
             <h2>Datos de Contacto</h2>
@@ -215,7 +177,6 @@
             </div>
         </div>
 
-        <!-- Mapa -->
         <div class="map-container">
             <h3>Ubicación</h3>
             <iframe 
@@ -229,7 +190,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2024 Farmacia Patagónica</p>
     </footer>
