@@ -1,15 +1,16 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // Variables globales
+// script.js (corregido)
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ----- SLIDER DE PROMOCIONES -----
     let currentSlide = 0;
-    let isTransitioning = false; // Estado para evitar múltiples transiciones simultáneas
+    let isTransitioning = false;
     const slides = document.querySelectorAll('.promocion');
-    const totalSlides = slides.length;
+    const totalSlides = slides.length || 1;
     const slider = document.querySelector('.slider');
 
-
-    // Función para mover el slider
     function moveSlide(step) {
-        if (isTransitioning) return; // Evita transiciones múltiples
+        if (!slider) return;
+        if (isTransitioning) return;
         isTransitioning = true;
 
         currentSlide = (currentSlide + step + totalSlides) % totalSlides;
@@ -21,46 +22,33 @@ document.addEventListener("DOMContentLoaded", function() {
             isTransitioning = false;
         }, 500);
     }
-      
-    // Asignar los eventos de clic a los botones de navegación del slider
-    document.querySelector('.prev').addEventListener('click', function() {
-        moveSlide(-1);
-        resetAutoSlide();
-    });
-    document.querySelector('.next').addEventListener('click', function() {
-        moveSlide(1);
-        resetAutoSlide();
-    });
+    // Exponer globalmente por si hay onclick inline en el HTML
+    window.moveSlide = moveSlide;
 
-    // Función para cambiar las imágenes automáticamente cada 5 segundos
-    function autoSlide() {
-        moveSlide(1);
-    }
+    // Botones prev/next (si existen)
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    if (prevBtn) prevBtn.addEventListener('click', function () { moveSlide(-1); resetAutoSlide(); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { moveSlide(1); resetAutoSlide(); });
 
-    // Configurar intervalo para cambio automático de imágenes
+    function autoSlide() { moveSlide(1); }
     let slideInterval = setInterval(autoSlide, 3000);
-
-    // Reiniciar el intervalo cuando se hace clic en los botones
     function resetAutoSlide() {
         clearInterval(slideInterval);
         slideInterval = setInterval(autoSlide, 5000);
     }
 
-    // Función para normalizar el texto (eliminar tildes y poner en minúsculas)
-    function normalizeText(text) {
-        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-    }
-
-    // Obtener el modal y el botón de cierre
+    // ----- ELEMENTOS COMUNES -----
     const modal = document.getElementById('product-modal');
-    const closeModalButton = modal.querySelector('.close-modal');
     const body = document.body;
 
+    // Encontrar el botón de cerrar *solo si* modal existe
+    let closeModalButton = null;
+    if (modal) closeModalButton = modal.querySelector('.close-modal');
 
-    // --- CARRITO DE COMPRAS ---
+    // ----- CARRITO DE COMPRAS -----
     let cart = [];
 
-    // --- FUNCIONES DE CARRITO ---
     function updateCartCount() {
         const countEl = document.getElementById('cart-count');
         if (countEl) countEl.textContent = cart.length;
@@ -73,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function() {
         showCart();
     }
 
-    // Mostrar carrito con imágenes, texto y botón de eliminar
     function showCart() {
         const cartItems = document.getElementById('cart-items');
         cartItems.innerHTML = '';
@@ -84,31 +71,37 @@ document.addEventListener("DOMContentLoaded", function() {
             li.classList.add('empty-cart');
             cartItems.appendChild(li);
         } else {
-            cart.forEach((p, i) => {
+            cart.forEach((p, index) => {
+                // Elemento principal
                 const li = document.createElement('li');
                 li.classList.add('cart-item');
 
-                // Imagen
+                // Contenedor izquierdo: imagen + texto
+                const left = document.createElement('div');
+                left.classList.add('cart-left');
+
                 const img = document.createElement('img');
                 img.src = p.imagen;
                 img.alt = p.descripcion;
                 img.classList.add('cart-item-image');
 
-                // Texto
                 const span = document.createElement('span');
                 span.textContent = p.descripcion;
                 span.classList.add('cart-item-text');
 
-                // Botón eliminar individual
-                const btn = document.createElement('button');
-                btn.innerHTML = '<i class="fas fa-trash"></i>';
-                btn.classList.add('remove-btn');
-                btn.title = 'Eliminar este producto';
-                btn.addEventListener('click', () => removeFromCart(i));
+                left.appendChild(img);
+                left.appendChild(span);
 
-                li.appendChild(img);
-                li.appendChild(span);
-                li.appendChild(btn);
+                // Botón eliminar (ícono tacho)
+                const removeBtn = document.createElement('button');
+                removeBtn.classList.add('remove-btn');
+                removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                removeBtn.title = 'Eliminar este producto';
+                removeBtn.addEventListener('click', () => removeFromCart(index));
+
+                // Estructura final
+                li.appendChild(left);
+                li.appendChild(removeBtn);
                 cartItems.appendChild(li);
             });
         }
@@ -116,17 +109,13 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
-
-    function removeFromCart(index) {
-        cart.splice(index, 1);
-        showCart();
-        updateCartCount();
-    }
-
-    // --- EVENTOS DEL CARRITO ---
     window.addEventListener('load', () => {
-        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-        cart = savedCart;
+        try {
+            const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = Array.isArray(savedCart) ? savedCart : [];
+        } catch (e) {
+            cart = [];
+        }
         updateCartCount();
     });
 
@@ -142,60 +131,48 @@ document.addEventListener("DOMContentLoaded", function() {
             cartModal.classList.add('active');
         });
     }
-
-    if (closeCart) {
-        closeCart.addEventListener('click', () => {
-            cartModal.classList.remove('active');
-        });
-    }
-
-    if (clearCart) {
-        clearCart.addEventListener('click', () => {
+    if (closeCart) closeCart.addEventListener('click', () => cartModal.classList.remove('active'));
+    if (clearCart) clearCart.addEventListener('click', () => {
+        cart = [];
+        localStorage.removeItem('cart');
+        showCart();
+        updateCartCount();
+    });
+    if (buyCart) buyCart.addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert("Tu carrito está vacío 😕");
+        } else {
+            alert("Gracias por tu compra 🛍️");
             cart = [];
             localStorage.removeItem('cart');
             showCart();
             updateCartCount();
-        });
+            if (cartModal) cartModal.classList.remove('active');
+        }
+    });
+
+    // ----- UTIL -----
+    function normalizeText(text = '') {
+        try {
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        } catch (e) {
+            return String(text).toLowerCase();
+        }
     }
 
-    // Evento del botón "Comprar"
-    if (buyCart) {
-        buyCart.addEventListener('click', () => {
-            if (cart.length === 0) {
-                alert("Tu carrito está vacío 😕");
-            } else {
-                alert("Gracias por tu compra 🛍️");
-                cart = [];
-                localStorage.removeItem('cart');
-                showCart();
-                updateCartCount();
-                cartModal.classList.remove('active');
-            }
-        });
-    }
-
-
-
-
-    // Función para abrir el modal con productos
+    // ----- MODAL DE PRODUCTOS -----
     function openProductModal(category, products) {
+        if (!modal) {
+            console.error('product-modal no está presente en el DOM.');
+            return;
+        }
         const title = document.getElementById('category-title');
         const productImagesContainer = document.getElementById('product-images');
 
-        // Restablecer el scroll de la ventana principal (página) al principio
-        window.scrollTo(0, 0); // Asegura que la página se desplace al principio de la página
+        if (title) title.textContent = category || 'Categoría';
+        if (productImagesContainer) productImagesContainer.innerHTML = '';
 
-        // Mostrar el modal
-        modal.style.display = 'flex';
-
-        // Asignar el título de la categoría
-        title.textContent = category;
-
-        // Limpiar el contenido previo de los productos
-        productImagesContainer.innerHTML = '';
-
-        // Mostrar los productos encontrados en el modal
-        products.forEach(product => {
+        (products || []).forEach(product => {
             const productDiv = document.createElement('div');
             productDiv.classList.add('product-item');
 
@@ -207,50 +184,47 @@ document.addEventListener("DOMContentLoaded", function() {
             descElement.classList.add('product-description');
             descElement.textContent = product.descripcion;
 
-            productDiv.appendChild(imgElement);
-            productDiv.appendChild(descElement);
-            productImagesContainer.appendChild(productDiv);
-
             const addButton = document.createElement('button');
             addButton.textContent = 'Agregar al carrito';
             addButton.classList.add('add-to-cart');
             addButton.addEventListener('click', () => addToCart(product));
 
+            productDiv.appendChild(imgElement);
+            productDiv.appendChild(descElement);
             productDiv.appendChild(addButton);
+            if (productImagesContainer) productImagesContainer.appendChild(productDiv);
         });
 
+        // usar .product-content (coincide con tu HTML)
+        const modalContent = modal.querySelector('.product-content, .modal-content');
+        if (modalContent) modalContent.scrollTop = 0;
 
-
-        // Restablecer el scroll del modal (en caso de que haya contenido desplazable dentro)
-        const modalContent = modal.querySelector('.modal-content');
-        if (modalContent) {
-            modalContent.scrollTop = 0; // Asegura que el scroll interno del modal también se restablezca
-        }
-
-        // Bloquear el scroll del body para que no se mueva la página principal mientras el modal está abierto
-        body.style.overflow = 'hidden'; // Bloquea el scroll de la página
+        modal.style.display = 'flex';
+        body.style.overflow = 'hidden';
     }
 
-    // Función para cerrar el modal
-    closeModalButton.addEventListener('click', function () {
-        modal.style.display = 'none'; // Cerrar el modal
-        body.style.overflow = ''; // Restaurar el scroll de la página principal
-    });
-
-    // Agregar un evento de cierre si el usuario hace clic fuera del modal
-    modal.addEventListener('click', function (event) {
-        // Verificar si el clic fue fuera del contenido del modal
-        if (event.target === modal) {
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', function () {
             modal.style.display = 'none';
-            body.classList.remove('no-scroll'); // Deshabilitar la clase no-scroll
+            body.style.overflow = '';
+        });
+    } else {
+        // Si no tiene botón de cierre, al menos permitir cerrar clickeando fuera
+        if (modal) {
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    body.style.overflow = '';
+                }
+            });
         }
-    });
+    }
 
-    // Datos de productos por categoría
+    // ----- BASE DE DATOS DE PRODUCTOS -----
     const productsData = {
         'Accesorios y Regalería': {
             'Aros': [
-                { imagen: 'imagenes/acc1.jpg', descripcion: 'Aros de acero quirírgico. Frutillas', mas: 'aros' },
+                { imagen: 'imagenes/acc1.jpg', descripcion: 'Aros de acero quirírgico. Frutillas' },
                 { imagen: 'imagenes/acc2.jpg', descripcion: 'Aros de acero quirírgico. Ballenas' },
                 { imagen: 'imagenes/acc3.jpg', descripcion: 'Aros de acero quirírgico. Elefantes' },
                 { imagen: 'imagenes/acc4.jpg', descripcion: 'Aros de acero quirírgico. Luna' },
@@ -316,40 +290,34 @@ document.addEventListener("DOMContentLoaded", function() {
         },
     };
 
+    // ----- BÚSQUEDA DE PRODUCTOS -----
     function handleSearch() {
-        const searchInput = document.getElementById('search-input').value.trim();
+        const inputEl = document.getElementById('search-input');
+        const searchInput = inputEl ? inputEl.value.trim() : '';
         if (!searchInput) {
             alert('Por favor, ingrese un término de búsqueda.');
             return;
         }
-    
-        const searchTerm = normalizeText(searchInput); // Normalizar el texto ingresado
+
+        const searchTerm = normalizeText(searchInput);
         let filteredProducts = [];
-    
-        // Función para buscar recursivamente en todas las categorías y subcategorías
+
         function searchProducts(categoryData) {
             Object.keys(categoryData).forEach(category => {
                 const data = categoryData[category];
-    
                 if (Array.isArray(data)) {
-                    // Si es un array, buscar en las descripciones de los productos
-                    const matchingProducts = data.filter(product =>
+                    const matches = data.filter(product =>
                         normalizeText(product.descripcion).includes(searchTerm)
                     );
-                    if (matchingProducts.length > 0) {
-                        filteredProducts = [...filteredProducts, ...matchingProducts];
-                    }
+                    if (matches.length > 0) filteredProducts.push(...matches);
                 } else if (typeof data === 'object') {
-                    // Si es un objeto, hacer una búsqueda recursiva en la subcategoría
                     searchProducts(data);
                 }
             });
         }
-    
-        // Iniciar la búsqueda en `productsData`
         searchProducts(productsData);
-    
-        // Eliminar productos con imágenes repetidas
+
+        // eliminar duplicados por imagen
         const imagenesUnicas = new Set();
         filteredProducts = filteredProducts.filter(product => {
             if (!imagenesUnicas.has(product.imagen)) {
@@ -358,187 +326,152 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             return false;
         });
-    
-        // Cerrar el modal de advertencia antes de continuar
+
+        // ocultar warning antes de decidir
         const warningModal = document.getElementById('warning-modal');
         if (warningModal) warningModal.style.display = 'none';
-    
-        // Mostrar los productos encontrados o un mensaje si no hay coincidencias
+
         if (filteredProducts.length > 0) {
             openProductModal('Resultados de búsqueda', filteredProducts);
         } else {
-            openWarningModal(); // Abrir el modal de advertencia si no se encuentran productos
+            openWarningModal();
         }
-    
-        document.getElementById('search-input').value = '';
-    }    
 
-    // Función para cerrar el modal de advertencia
-    document.getElementById('close-warning-modal').addEventListener('click', function () {
+        if (inputEl) inputEl.value = '';
+    }
+
+    function openWarningModal() {
         const warningModal = document.getElementById('warning-modal');
-        warningModal.style.display = 'none'; // Ocultar el modal cuando se hace clic en la cruz
-    });
-
-    // Evento de búsqueda al hacer clic en el ícono
-    document.getElementById('search-icon').addEventListener('click', handleSearch);
-
-    // Evento de búsqueda al presionar "Enter" o "Listo" en dispositivos móviles
-    document.getElementById('search-input').addEventListener('keydown', function (event) {
-        if (event.key === 'Enter' || event.keyCode === 13) {
-            event.preventDefault(); // Evita el comportamiento predeterminado en formularios
-            handleSearch();  // Ejecuta la búsqueda
+        if (!warningModal) {
+            console.error('warning-modal no existe en el DOM');
+            return;
         }
+        warningModal.style.display = 'flex';
+        const closeBtn = document.getElementById('close-warning-modal');
+        if (closeBtn) {
+            // removemos listeners previos por seguridad
+            closeBtn.replaceWith(closeBtn.cloneNode(true));
+            const newClose = document.getElementById('close-warning-modal');
+            newClose.addEventListener('click', () => {
+                warningModal.style.display = 'none';
+            });
+        }
+    }
+
+    const closeWarningBtn = document.getElementById('close-warning-modal');
+    if (closeWarningBtn) closeWarningBtn.addEventListener('click', function () {
+        const warningModal = document.getElementById('warning-modal');
+        if (warningModal) warningModal.style.display = 'none';
     });
 
+    const searchIcon = document.getElementById('search-icon');
+    if (searchIcon) searchIcon.addEventListener('click', handleSearch);
+    const searchInputEl = document.getElementById('search-input');
+    if (searchInputEl) {
+        searchInputEl.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                event.preventDefault();
+                handleSearch();
+            }
+        });
+    }
+
+    // ----- MENÚ y demás (se mantiene igual) -----
     document.querySelectorAll('.dropdown-content a, .sub-menu a').forEach(link => {
         link.addEventListener('click', function (event) {
-            const subMenu = this.nextElementSibling; // Buscar si hay un submenú asociado
-    
-            // Si el enlace tiene un submenú, solo lo despliega y no abre el modal
+            const subMenu = this.nextElementSibling;
             if (subMenu && subMenu.classList.contains('sub-menu')) {
-                event.preventDefault(); // Evita la navegación
-                subMenu.classList.toggle('active'); // Abre/cierra el submenú
-                return; // Sale de la función para no mostrar el modal
+                event.preventDefault();
+                subMenu.classList.toggle('active');
+                return;
             }
-    
-            event.preventDefault(); // Evita navegación en enlaces normales
-    
-            const category = this.getAttribute('data-category'); // Obtener la categoría
-            let categoryProducts = findCategoryProducts(category, productsData); // Buscar productos en cualquier nivel
-    
-            if (categoryProducts) {
-                openProductModal(category, categoryProducts); // Abre el modal con productos
-            } else {
-                alert('No hay productos disponibles para esta categoría.');
-            }
+            event.preventDefault();
+            const category = this.getAttribute('data-category');
+            const categoryProducts = findCategoryProducts(category, productsData);
+            if (categoryProducts) openProductModal(category, categoryProducts);
+            else alert('No hay productos disponibles para esta categoría.');
         });
     });
 
-    document.querySelector('.dropdown-btn').addEventListener('click', function (event) {
-        event.preventDefault(); // Evita la navegación del enlace
-        event.stopPropagation(); // Evita que cierre los submenús si solo se está abriendo el menú hamburguesa
-    
+    document.querySelector('.dropdown-btn')?.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
         const dropdownContent = document.querySelector('.dropdown-content');
-        dropdownContent.classList.toggle('active'); // Alternar visibilidad del menú
-    
-        // Solo cerrar submenús si el menú se está ocultando
-        if (!dropdownContent.classList.contains('active')) {
-            document.querySelectorAll('.sub-menu').forEach(subMenu => {
-                subMenu.classList.remove('active');
-            });
+        dropdownContent?.classList.toggle('active');
+        if (!dropdownContent?.classList.contains('active')) {
+            document.querySelectorAll('.sub-menu').forEach(subMenu => subMenu.classList.remove('active'));
         }
     });
 
-    function findCategoryProducts(category, data) {
-        for (let key in data) {
-            if (key === category) {
-                return data[key]; // Retorna los productos si encuentra la categoría exacta
-            }
-            if (typeof data[key] === 'object') {
-                const found = findCategoryProducts(category, data[key]); // Busca dentro de subcategorías
-                if (found) return found;
-            }
-        }
-        return null; // Retorna null si no encuentra la categoría
-    }
-
-    // Manejo del menú desplegable (icono hamburguesa)
+    // helpers de menu
     const menuIcon = document.getElementById('menu-icon');
     const navMenu = document.getElementById('nav-menu');
     const productDropdown = document.querySelector('.dropdown');
-    const dropdownBtn = productDropdown.querySelector('.dropdown-btn');
+    const dropdownBtn = productDropdown?.querySelector('.dropdown-btn');
 
-    menuIcon.addEventListener('click', function () {
-        navMenu.classList.toggle('show'); // Alterna la visibilidad del menú
-        productDropdown.classList.remove('show'); // Oculta el desplegable de productos
+    menuIcon?.addEventListener('click', function () {
+        navMenu?.classList.toggle('show');
+        productDropdown?.classList.remove('show');
+    });
+    dropdownBtn?.addEventListener('click', function (event) {
+        event.preventDefault();
+        productDropdown?.classList.toggle('show');
     });
 
-    dropdownBtn.addEventListener('click', function (event) {
-        event.preventDefault(); // Prevenir el comportamiento por defecto
-        productDropdown.classList.toggle('show'); // Muestra/Oculta el desplegable de productos
-    });
-
-       
-    // Cerrar el menú cuando se hace clic en cualquier opción (excepto "Productos")
     document.querySelectorAll('.nav a').forEach(link => {
-        link.addEventListener('click', function(event) {
-            // Solo cerrar el menú si el clic no es en "Productos"
-            if (!this.classList.contains('dropdown-btn')) {
-                navMenu.classList.remove('show'); // Cierra el menú de navegación
-            }
+        link.addEventListener('click', function () {
+            if (!this.classList.contains('dropdown-btn')) navMenu?.classList.remove('show');
         });
     });
 
-    // Opcional: Si quieres cerrar el menú cuando se hace clic fuera de él
-    document.addEventListener('click', function(event) {
-    const navMenu = document.getElementById('nav-menu');
-    const menuIcon = document.getElementById('menu-icon');
-    
-    // Verifica que el clic no sea ni en el menú ni en el icono
-    if (!navMenu.contains(event.target) && !menuIcon.contains(event.target) && !productDropdown.contains(event.target)) {
-        navMenu.classList.remove('show'); // Cierra el menú de navegación
-    }
+    document.addEventListener('click', function (event) {
+        if (!navMenu?.contains(event.target) &&
+            !menuIcon?.contains(event.target) &&
+            !productDropdown?.contains(event.target)) {
+            navMenu?.classList.remove('show');
+        }
     });
 
-    // Manejo del desplazamiento hacia promociones
+    // scroll a promociones
     const promocionesLink = document.querySelector('a[href="#promociones"]');
-
-    promocionesLink.addEventListener('click', function (event) {
-        event.preventDefault();  // Prevenir el comportamiento por defecto (salto inmediato)
-        
-        // Desplazarse 50px antes de la sección 'Promociones'
+    promocionesLink?.addEventListener('click', function (event) {
+        event.preventDefault();
         const promocionesSection = document.getElementById('promociones');
-        window.scrollTo({
-            top: promocionesSection.offsetTop - 50,  // Ajuste de desplazamiento hacia arriba
-            behavior: 'smooth'  // Desplazamiento suave
-        });
+        if (promocionesSection) window.scrollTo({ top: promocionesSection.offsetTop - 50, behavior: 'smooth' });
     });
 
-    // Manejo del modal de "Turnos"
+    // turnos
     const turnosModal = document.getElementById("turnos-modal");
     const openTurnos = document.getElementById("open-turnos");
     const closeTurnos = document.getElementById("close-turnos");
     const turnosImage = document.getElementById('turnos-image');
 
-    openTurnos.addEventListener("click", (e) => {
+    openTurnos?.addEventListener("click", (e) => {
         e.preventDefault();
-        
-        // Aseguramos que la imagen se establece correctamente y se visualiza en el modal
-        const imagePath = 'imagenes/turnos.jpg'; // Cambia esta ruta si la imagen está en otro directorio
-        turnosImage.src = imagePath; // Establece la fuente de la imagen
-        turnosImage.onload = () => {
-            // Solo mostramos el modal si la imagen se cargó correctamente
-            turnosModal.style.display = 'flex';
-            body.classList.add('no-scroll'); // Bloquear el scroll de la página principal
-        };
-        turnosImage.onerror = () => {
-            console.error('Error al cargar la imagen de turnos.');
-            alert('No se pudo cargar la imagen de turnos.');
-        };
-    });
+        const imagePath = 'imagenes/turnos.jpg';
+        if (turnosImage) turnosImage.src = imagePath;
 
-    closeTurnos.addEventListener("click", () => {
-        turnosModal.style.display = 'none'; // Cerrar el modal al hacer clic en el botón
-        body.classList.remove('no-scroll'); // Restaurar el scroll de la página principal
-    });
-
-    turnosModal.addEventListener("click", (e) => {
-        if (e.target === turnosModal) {
-            turnosModal.style.display = 'none'; // Cerrar el modal al hacer clic fuera de él
-            body.classList.remove('no-scroll'); // Restaurar el scroll de la página principal
+        if (turnosImage) {
+            turnosImage.onload = () => { if (turnosModal) { turnosModal.style.display = 'flex'; body.classList.add('no-scroll'); } };
+            turnosImage.onerror = () => { console.error('Error al cargar la imagen de turnos.'); alert('No se pudo cargar la imagen de turnos.'); };
+        } else {
+            if (turnosModal) { turnosModal.style.display = 'flex'; body.classList.add('no-scroll'); }
         }
     });
 
+    closeTurnos?.addEventListener("click", () => { if (turnosModal) turnosModal.style.display = 'none'; body.classList.remove('no-scroll'); });
+    turnosModal?.addEventListener("click", (e) => { if (e.target === turnosModal) { turnosModal.style.display = 'none'; body.classList.remove('no-scroll'); } });
 
-    promocionesLink.addEventListener('click', function (event) {
-        event.preventDefault();
+    // función recursiva para buscar categoría
+    function findCategoryProducts(category, data) {
+        for (let key in data) {
+            if (key === category) return data[key];
+            if (typeof data[key] === 'object') {
+                const found = findCategoryProducts(category, data[key]);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
 
-        const promocionesSection = document.getElementById('promociones');
-        window.scrollTo({
-            top: promocionesSection.offsetTop - 50,
-            behavior: 'smooth'
-        });
-    });
-
-});
-    
+}); // DOMContentLoaded
