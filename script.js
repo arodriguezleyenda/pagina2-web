@@ -71,10 +71,12 @@ document.addEventListener("DOMContentLoaded", function () {
             li.classList.add('empty-cart');
             cartItems.appendChild(li);
         } else {
-            cart.forEach((p) => {
+            cart.forEach((p, index) => {
+                // Elemento principal
                 const li = document.createElement('li');
                 li.classList.add('cart-item');
 
+                // Contenedor izquierdo: imagen + texto
                 const left = document.createElement('div');
                 left.classList.add('cart-left');
 
@@ -90,10 +92,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 left.appendChild(img);
                 left.appendChild(span);
 
+                // Estructura final
                 li.appendChild(left);
                 cartItems.appendChild(li);
             });
-
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -131,21 +133,20 @@ document.addEventListener("DOMContentLoaded", function () {
     if (buyCart) buyCart.addEventListener('click', () => {
         if (cart.length === 0) {
             Swal.fire({
-                position: "top-end",
+                position: "center",
                 icon: "error",
-                title: "El carrito se encuentra vacío",
+                title: "El carrito esta vacío",
                 showConfirmButton: false,
                 timer: 1500
             });
         } else {
             Swal.fire({
-                position: "top-end",
+                position: "center",
                 icon: "success",
                 title: "La compra se realizó exitosamente",
                 showConfirmButton: false,
                 timer: 1500
             });
-
             cart = [];
             localStorage.removeItem('cart');
             showCart();

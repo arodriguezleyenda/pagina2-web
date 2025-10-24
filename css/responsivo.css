@@ -1,3 +1,21 @@
+@media (min-width: 768px) {
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+}
+
+@media (min-width: 768px) {
+   /* Animación para deslizar el cuadro desde la derecha */
+    @keyframes slideInFromRight {
+        0% {
+            transform: translateX(200%);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+}
+
 @media (max-width: 768px) {
     body{
         background-size: 50% 30%;
@@ -19,10 +37,6 @@
         cursor: pointer;
         font-size: 30px;
         color: white;
-    }
-
-    .dropdown-content.active {
-        display: block;
     }
 
     #nav-menu {
@@ -325,6 +339,10 @@
         display: inline-block;
     }
 
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
     .product-item {
         position: relative;
         z-index: 1;
@@ -346,21 +364,10 @@
         margin-top: 20px;
     }
 
-    #turnos-image {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
-
-    .close-turnos {
-        margin-top: 17%;
-        margin-right: 1%;
-    }
-
     .cart-modal {
         width: 100%;
         right: -100%;
-        z-index: 20000;
+        z-index: 20000; /* por encima del header */
     }
 
     .cart-modal.active {
@@ -373,6 +380,7 @@
         overflow-y: auto;
     }
 
+    /* Botón cerrar más accesible */
     #close-cart {
         position: absolute;
         top: 10px;
@@ -382,14 +390,15 @@
         z-index: 20001;
     }
 
+    /* Botones del carrito visibles sin scroll excesivo */
     .cart-buttons {
-        margin-top: 30%;
+        margin-top: 20px;
         flex-direction: column;
     }
 
     .cart-buttons button {
-        width: 30%;
-        margin-top: 30%;
+        width: 100%;
     }
+
     
 }
