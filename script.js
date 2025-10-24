@@ -71,12 +71,10 @@ document.addEventListener("DOMContentLoaded", function () {
             li.classList.add('empty-cart');
             cartItems.appendChild(li);
         } else {
-            cart.forEach((p, index) => {
-                // Elemento principal
+            cart.forEach((p) => {
                 const li = document.createElement('li');
                 li.classList.add('cart-item');
 
-                // Contenedor izquierdo: imagen + texto
                 const left = document.createElement('div');
                 left.classList.add('cart-left');
 
@@ -92,18 +90,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 left.appendChild(img);
                 left.appendChild(span);
 
-                // Botón eliminar (ícono tacho)
-                const removeBtn = document.createElement('button');
-                removeBtn.classList.add('remove-btn');
-                removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
-                removeBtn.title = 'Eliminar este producto';
-                removeBtn.addEventListener('click', () => removeFromCart(index));
-
-                // Estructura final
                 li.appendChild(left);
-                li.appendChild(removeBtn);
                 cartItems.appendChild(li);
             });
+
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -140,9 +130,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     if (buyCart) buyCart.addEventListener('click', () => {
         if (cart.length === 0) {
-            alert("Tu carrito está vacío 😕");
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: "El carrito se encuentra vacío",
+                showConfirmButton: false,
+                timer: 1500
+            });
         } else {
-            alert("Gracias por tu compra 🛍️");
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "La compra se realizó exitosamente",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
             cart = [];
             localStorage.removeItem('cart');
             showCart();
