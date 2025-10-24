@@ -199,7 +199,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (productImagesContainer) productImagesContainer.appendChild(productDiv);
         });
 
-        // usar .product-content (coincide con tu HTML)
         const modalContent = modal.querySelector('.product-content, .modal-content');
         if (modalContent) modalContent.scrollTop = 0;
 
@@ -213,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
             body.style.overflow = '';
         });
     } else {
-        // Si no tiene botón de cierre, al menos permitir cerrar clickeando fuera
         if (modal) {
             modal.addEventListener('click', function (event) {
                 if (event.target === modal) {
@@ -331,7 +329,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
         });
 
-        // ocultar warning antes de decidir
         const warningModal = document.getElementById('warning-modal');
         if (warningModal) warningModal.style.display = 'none';
 
@@ -353,7 +350,6 @@ document.addEventListener("DOMContentLoaded", function () {
         warningModal.style.display = 'flex';
         const closeBtn = document.getElementById('close-warning-modal');
         if (closeBtn) {
-            // removemos listeners previos por seguridad
             closeBtn.replaceWith(closeBtn.cloneNode(true));
             const newClose = document.getElementById('close-warning-modal');
             newClose.addEventListener('click', () => {
@@ -380,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ----- MENÚ y demás (se mantiene igual) -----
+    // ----- MENÚ  -----
     document.querySelectorAll('.dropdown-content a, .sub-menu a').forEach(link => {
         link.addEventListener('click', function (event) {
             const subMenu = this.nextElementSibling;
@@ -407,7 +403,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // helpers de menu
     const menuIcon = document.getElementById('menu-icon');
     const navMenu = document.getElementById('nav-menu');
     const productDropdown = document.querySelector('.dropdown');
@@ -444,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (promocionesSection) window.scrollTo({ top: promocionesSection.offsetTop - 50, behavior: 'smooth' });
     });
 
-    // turnos
+    // ----- TURNOS -----
     const turnosModal = document.getElementById("turnos-modal");
     const openTurnos = document.getElementById("open-turnos");
     const closeTurnos = document.getElementById("close-turnos");
@@ -466,7 +461,6 @@ document.addEventListener("DOMContentLoaded", function () {
     closeTurnos?.addEventListener("click", () => { if (turnosModal) turnosModal.style.display = 'none'; body.classList.remove('no-scroll'); });
     turnosModal?.addEventListener("click", (e) => { if (e.target === turnosModal) { turnosModal.style.display = 'none'; body.classList.remove('no-scroll'); } });
 
-    // función recursiva para buscar categoría
     function findCategoryProducts(category, data) {
         for (let key in data) {
             if (key === category) return data[key];
@@ -478,4 +472,4 @@ document.addEventListener("DOMContentLoaded", function () {
         return null;
     }
 
-}); // DOMContentLoaded
+}); 

@@ -367,7 +367,7 @@
     .cart-modal {
         width: 100%;
         right: -100%;
-        z-index: 20000; /* por encima del header */
+        z-index: 20000; 
     }
 
     .cart-modal.active {
@@ -380,7 +380,6 @@
         overflow-y: auto;
     }
 
-    /* Botón cerrar más accesible */
     #close-cart {
         position: absolute;
         top: 10px;
@@ -390,15 +389,14 @@
         z-index: 20001;
     }
 
-    /* Botones del carrito visibles sin scroll excesivo */
-    .cart-buttons {
-        margin-top: 20px;
+     .cart-buttons {
+        margin-top: 30%;
         flex-direction: column;
     }
 
     .cart-buttons button {
         width: 30%;
+        margin-top: 30%;
     }
-
-    
+ 
 }
