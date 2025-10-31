@@ -62,7 +62,6 @@ document.addEventListener("DOMContentLoaded", function () {
         countEl.textContent = totalUnits;
     }
 
-
     function addToCart(product) {
         const existing = cart.find(p => p.descripcion === product.descripcion);
         if (existing) {
@@ -209,8 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         cartModal.classList.remove('active');
     });
-
-
 
     if (closeCart) closeCart.addEventListener('click', () => cartModal.classList.remove('active'));
     if (clearCart) clearCart.addEventListener('click', () => {
@@ -362,8 +359,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
-
     // ----- BASE DE DATOS DE PRODUCTOS -----
     const productsData = {
         'Accesorios y Regalería': {
@@ -395,8 +390,8 @@ document.addEventListener("DOMContentLoaded", function () {
         'Electro medicina': [
             { imagen: 'imagenes/elc2.jpg', descripcion: 'Tensiometro aneroide con estetoscopio', precio:4000 },
             { imagen: 'imagenes/elc3.jpg', descripcion: 'Lupa de escala y guía sw agujas para jeringas de insulina', precio:4000 },
-            { imagen: 'imagenes/elc4.jpg', descripcion: 'FreeStyle Optium. Sistema de monitoreo de glocosa y cetonas en sangre', precio:4000 },
-            { imagen: 'imagenes/elc5.jpg', descripcion: 'FreeStyle Optium Neo. Sistema de monitoreo de glocosa y cetonas en sangre', precio:4000 },
+            { imagen: 'imagenes/elc4.jpg', descripcion: 'FreeStyle Optium. Sistema de monitoreo de glucosa', precio:4000 },
+            { imagen: 'imagenes/elc5.jpg', descripcion: 'FreeStyle Optium Neo. Sistema de monitoreo de glucosa', precio:4000 },
             { imagen: 'imagenes/elc1.jpg', descripcion: 'Cámara espaciadora valvulada', precio:4000 },
             { imagen: 'imagenes/fit38.jpg', descripcion: 'Masajeador', precio:4000 }
         ],
@@ -423,12 +418,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 { imagen: 'imagenes/vit5.jpg', descripcion: 'Lecitina 1200', precio:4000 }
             ],
             'Suplementos': [
-                { imagen: 'imagenes/sup.jpg', descripcion: 'BCAA. Suplemento dietario a base de aminoacidos ramificados, vitamina C, B2 y B6', precio:4000 },
-                { imagen: 'imagenes/sup2.jpg', descripcion: 'Creatine. Suplemento dietario a base de monohidrato de creatina', precio:4000 },
-                { imagen: 'imagenes/sup3.jpg', descripcion: 'Energy gel. Repositor energético. +3 cafeína, taurina ginseng. Sabor a frutos rojos', precio:4000 },
-                { imagen: 'imagenes/sup4.jpg', descripcion: 'Energy gel. Repositor energético. +4 L-valina, L-leucina, L-isoleucinal, L-glutamina. Sabor a frutos rojos', precio:4000 },
-                { imagen: 'imagenes/sup5.jpg', descripcion: 'Glutamine. Suplemento dietario a base de L-glutamina', precio:4000 },
-                { imagen: 'imagenes/sup6.jpg', descripcion: 'Multi vitaminico y mineral. Suplemento dietario a base de vitaminas y minerales', precio:4000 },
+                { imagen: 'imagenes/sup.jpg', descripcion: 'BCAA. Suplemento dietario a base de aminoacidos ramificados', precio:4000 },
+                { imagen: 'imagenes/sup2.jpg', descripcion: 'Creatine. Suplemento dietario', precio:4000 },
+                { imagen: 'imagenes/sup3.jpg', descripcion: 'Energy gel. Repositor energético. +3 ', precio:4000 },
+                { imagen: 'imagenes/sup4.jpg', descripcion: 'Energy gel. Repositor energético. +4', precio:4000 },
+                { imagen: 'imagenes/sup5.jpg', descripcion: 'Glutamine. Suplemento dietario', precio:4000 },
+                { imagen: 'imagenes/sup6.jpg', descripcion: 'Multi vitaminico y mineral. Suplemento dietario', precio:4000 },
                 { imagen: 'imagenes/sup7.jpg', descripcion: 'Pre workout energy', precio:4000 }
             ]
         },
@@ -523,14 +518,12 @@ document.addEventListener("DOMContentLoaded", function () {
         link.addEventListener('click', function (event) {
             const subMenu = this.nextElementSibling;
 
-            // Si tiene un submenú, solo lo despliega/oculta
             if (subMenu && subMenu.classList.contains('sub-menu')) {
                 event.preventDefault();
                 subMenu.classList.toggle('active');
                 return;
             }
 
-            // Si es una categoría final
             event.preventDefault();
             const category = this.getAttribute('data-category');
             const categoryProducts = findCategoryProducts(category, productsData);
@@ -538,7 +531,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (categoryProducts) {
                 openProductModal(category, categoryProducts);
 
-                // 🔹 Cerrar menú y submenús
                 const navMenu = document.getElementById('nav-menu');
                 if (navMenu) navMenu.classList.remove('show');
 
@@ -546,7 +538,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     menu.classList.remove('active');
                 });
 
-                // También cerramos el dropdown principal (por estética)
                 const dropdownContent = document.querySelector('.dropdown-content');
                 if (dropdownContent) dropdownContent.classList.remove('active');
             } else {
@@ -554,7 +545,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-
 
     document.querySelector('.dropdown-btn')?.addEventListener('click', function (event) {
         event.preventDefault();
@@ -587,7 +577,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-
 
     document.addEventListener('click', function (event) {
         if (!navMenu?.contains(event.target) &&
