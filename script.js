@@ -21,10 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
             isTransitioning = false;
         }, 500);
     }
-    // Exponer globalmente por si hay onclick inline en el HTML
+
     window.moveSlide = moveSlide;
 
-    // Botones prev/next (si existen)
     const prevBtn = document.querySelector('.prev');
     const nextBtn = document.querySelector('.next');
     if (prevBtn) prevBtn.addEventListener('click', function () { moveSlide(-1); resetAutoSlide(); });
@@ -37,11 +36,16 @@ document.addEventListener("DOMContentLoaded", function () {
         slideInterval = setInterval(autoSlide, 5000);
     }
 
-    // ----- ELEMENTOS COMUNES -----
+    const promocionesLink = document.querySelector('a[href="#promociones"]');
+    promocionesLink?.addEventListener('click', function (event) {
+        event.preventDefault();
+        const promocionesSection = document.getElementById('promociones');
+        if (promocionesSection) window.scrollTo({ top: promocionesSection.offsetTop - 50, behavior: 'smooth' });
+    });
+
     const modal = document.getElementById('product-modal');
     const body = document.body;
 
-    // Encontrar el botón de cerrar *solo si* modal existe
     let closeModalButton = null;
     if (modal) closeModalButton = modal.querySelector('.closeProd-modal');
 
@@ -52,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const countEl = document.getElementById('cart-count');
         if (!countEl) return;
 
-        // Sumar todas las cantidades (quantity)
         const totalUnits = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
         countEl.textContent = totalUnits;
@@ -65,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             existing.quantity = (existing.quantity || 1) + 1;
         } else {
             product.quantity = 1;
-            product.precio = product.precio || 0; // si no tiene precio, será 0
+            product.precio = product.precio || 0;
             cart.push(product);
         }
         updateCartCount();
@@ -77,8 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return cart.reduce((total, p) => total + (p.precio || 0) * (p.quantity || 1), 0);
     }
 
-
-
     function showCart() {
         const cartItems = document.getElementById('cart-items');
         cartItems.innerHTML = '';
@@ -89,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
             li.classList.add('empty-cart');
             cartItems.appendChild(li);
 
-            // <- Aseguramos que el total se muestre como $0 cuando el carrito está vacío
             const totalEl = document.getElementById('cart-total');
             if (totalEl) totalEl.textContent = `$0`;
 
@@ -100,13 +100,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const li = document.createElement('li');
             li.classList.add('cart-item');
 
-            // 🖼 Imagen
             const img = document.createElement('img');
             img.src = p.imagen;
             img.alt = p.descripcion;
             img.classList.add('cart-item-image');
 
-            // 📄 Descripción + precio
             const info = document.createElement('div');
             info.classList.add('cart-item-info');
 
@@ -121,7 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
             info.appendChild(desc);
             info.appendChild(price);
 
-            // ⚙️ Controles de cantidad y eliminar (por producto)
             const controlsContainer = document.createElement('div');
             controlsContainer.classList.add('cart-controls');
 
@@ -160,13 +157,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateCartCount();
             });
 
-            // ➕ Estructura: (−)(cantidad)(+)(tacho)
             controlsContainer.appendChild(minus);
             controlsContainer.appendChild(qty);
             controlsContainer.appendChild(plus);
             controlsContainer.appendChild(remove);
 
-            // 🧱 Montar toda la fila
             li.appendChild(img);
             li.appendChild(info);
             li.appendChild(controlsContainer);
@@ -177,11 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const totalEl = document.getElementById('cart-total');
         if (totalEl) totalEl.textContent = `$${getCartTotal().toLocaleString('es-AR')}`;
     }
-
-
-
-
-
 
     window.addEventListener('load', () => {
         try {
@@ -210,16 +200,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const cartIcon = document.getElementById('cart-icon');
         const cartModal = document.getElementById('cart-modal');
 
-        // si el carrito no está abierto, no hacemos nada
         if (!cartModal.classList.contains('active')) return;
 
-        // Si el clic fue DENTRO del carrito o sobre el ícono, no cerrar
         if (cartModal.contains(event.target) || cartIcon.contains(event.target)) return;
 
-        // Si el clic fue sobre un botón dentro del carrito, no cerrar
         if (event.target.closest('.cart-buttons') || event.target.closest('.qty-btn') || event.target.closest('.remove-item-btn')) return;
 
-        // En cualquier otro caso, cerrar
         cartModal.classList.remove('active');
     });
 
@@ -290,7 +276,6 @@ document.addEventListener("DOMContentLoaded", function () {
             descElement.classList.add('product-description');
             descElement.textContent = product.descripcion;
 
-            // 💰 Precio debajo de la descripción
             const priceElement = document.createElement('p');
             priceElement.classList.add('product-price');
             priceElement.textContent = `$${(product.precio || 0).toLocaleString('es-AR')}`;
@@ -300,29 +285,23 @@ document.addEventListener("DOMContentLoaded", function () {
             addButton.classList.add('add-to-cart');
 
             addButton.addEventListener('click', () => {
-                // Si ya hay un selector de cantidad visible, no volver a crearlo
                 if (addButton.parentElement.querySelector('.qty-selector')) return;
 
-                // Crear contenedor de cantidad
                 const qtyContainer = document.createElement('div');
                 qtyContainer.classList.add('qty-selector');
 
-                // Botón menos
                 const minusBtn = document.createElement('button');
                 minusBtn.textContent = '−';
                 minusBtn.classList.add('qty-btn');
 
-                // Cantidad inicial
                 const qtyDisplay = document.createElement('span');
                 qtyDisplay.textContent = '1';
                 qtyDisplay.classList.add('qty-display');
 
-                // Botón más
                 const plusBtn = document.createElement('button');
                 plusBtn.textContent = '+';
                 plusBtn.classList.add('qty-btn');
 
-                // Lógica
                 let qty = 1;
                 minusBtn.addEventListener('click', () => {
                     if (qty > 1) {
@@ -335,11 +314,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     qtyDisplay.textContent = qty;
                 });
 
-                // Reemplazar botón “Agregar al carrito” por el selector
                 addButton.replaceWith(qtyContainer);
                 qtyContainer.append(minusBtn, qtyDisplay, plusBtn);
 
-                // Al cabo de 2 segundos sin clic, agregar al carrito automáticamente
                 const confirmBtn = document.createElement('button');
                 confirmBtn.textContent = '✓';
                 confirmBtn.classList.add('confirm-add');
@@ -353,16 +330,13 @@ document.addEventListener("DOMContentLoaded", function () {
             productDiv.appendChild(addButton);
 
 
-            // Estructura del cuadro de producto
             productDiv.appendChild(imgElement);
             productDiv.appendChild(descElement);
-            productDiv.appendChild(priceElement); // 👈 agregado
+            productDiv.appendChild(priceElement);
             productDiv.appendChild(addButton);
 
             if (productImagesContainer) productImagesContainer.appendChild(productDiv);
         });
-
-
 
         const modalContent = modal.querySelector('.product-content, .modal-content');
         if (modalContent) modalContent.scrollTop = 0;
@@ -380,7 +354,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (modal) {
         modal.addEventListener('click', function (event) {
-            // Si el clic fue directamente sobre el fondo (no sobre elementos internos)
             if (event.target === modal) {
                 modal.style.display = 'none';
                 body.style.overflow = '';
@@ -487,7 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         searchProducts(productsData);
 
-        // eliminar duplicados por imagen
+        // eliminar imagenes duplicadas
         const imagenesUnicas = new Set();
         filteredProducts = filteredProducts.filter(product => {
             if (!imagenesUnicas.has(product.imagen)) {
@@ -597,14 +570,6 @@ document.addEventListener("DOMContentLoaded", function () {
             !productDropdown?.contains(event.target)) {
             navMenu?.classList.remove('show');
         }
-    });
-
-    // scroll a promociones
-    const promocionesLink = document.querySelector('a[href="#promociones"]');
-    promocionesLink?.addEventListener('click', function (event) {
-        event.preventDefault();
-        const promocionesSection = document.getElementById('promociones');
-        if (promocionesSection) window.scrollTo({ top: promocionesSection.offsetTop - 50, behavior: 'smooth' });
     });
 
     // ----- TURNOS -----
