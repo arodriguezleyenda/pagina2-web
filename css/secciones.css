@@ -360,13 +360,11 @@
     font-size: 0.8rem;
     padding: 2px 6px;
 }
-
-/* --- Modal del carrito --- */
 .cart-modal {
     position: fixed;
     top: 0;
     right: -400px;
-    width: 400px; /* 📏 columna lateral */
+    width: 400px;
     height: 100vh;
     background-color: #fff;
     box-shadow: -3px 0 10px rgba(0, 0, 0, 0.3);
@@ -378,13 +376,11 @@
 .cart-modal.active {
     right: 0;
 }
-
 .cart-content h2 {
     color: darkgreen;
     text-align: center;
     margin-bottom: 15px;
 }
-
 #cart-items {
     flex: 1;
     overflow-y: auto;
@@ -394,7 +390,6 @@
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
 }
-
 .cart-item {
     display: grid;
     grid-template-columns: 65px 1fr auto;
@@ -403,21 +398,18 @@
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
 }
-
 .cart-item-image {
     width: 65px;
     height: 65px;
     border-radius: 8px;
     object-fit: cover;
 }
-
 .cart-item-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
 }
-
 .cart-item-text {
     font-weight: 600;
     color: #333;
@@ -425,21 +417,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .cart-item-price {
     color: darkgreen;
     font-weight: bold;
     margin-top: 3px;
 }
-
 .cart-controls {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 6px;
 }
-
-
 .remove-item-btn {
     background: none;
     border: none;
@@ -448,13 +436,9 @@
     cursor: pointer;
     transition: color 0.2s ease;
 }
-
 .remove-item-btn:hover {
     color: darkred;
 }
-
-
-/* --- Total y botones --- */
 .cart-total-text {
     text-align: right;
     font-weight: bold;
@@ -470,8 +454,6 @@
     overflow-y: auto;
     box-sizing: border-box;
 }
-
-/* Pie del carrito fijo al fondo */
 .cart-footer {
     background-color: #f9f9f9;
     padding: 15px;
@@ -481,14 +463,11 @@
     z-index: 5;
     margin-bottom: 10%;
 }
-
-/* Botones en el pie */
 .cart-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
-
 #clear-cart,
 #buy-cart {
     flex: 1;
@@ -500,25 +479,20 @@
     font-size: 0.9rem;
     transition: background-color 0.3s ease;
 }
-
 #clear-cart {
     background-color: #a40000;
     color: white;
 }
-
 #clear-cart:hover {
     background-color: #cc0000;
 }
-
 #buy-cart {
     background-color: darkgreen;
     color: white;
 }
-
 #buy-cart:hover {
     background-color: #28a745;
 }
-
 #close-cart {
     position: absolute;
     top: 10px;
@@ -528,18 +502,16 @@
     cursor: pointer;
     transition: color 0.2s ease;
 }
-
 #close-cart:hover {
     color: darkgreen;
 }
-
 .qty-selector {
     position: absolute;
     top: 85%;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%; /* igual al botón .add-to-cart */
-    height: 36px; /* misma altura visual */
+    width: 90%;
+    height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -548,8 +520,6 @@
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-
-
 .qty-btn {
     background-color: #ff9800;
     border: none;
@@ -561,18 +531,15 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
-
 .qty-btn:hover {
     background-color: darkgreen;
 }
-
 .qty-display {
     width: 25px;
     text-align: center;
     font-weight: bold;
     color: #333;
 }
-
 .confirm-add {
     background-color: #ff9800;
     color: white;
@@ -582,7 +549,6 @@
     cursor: pointer;
     border-radius: 4px;
 }
-
 .confirm-add:hover {
     background-color: #e67e00;
 }
