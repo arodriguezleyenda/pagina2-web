@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     background-color: #4caf50;
-    background-image: url('imagenes/fondooo.png');
+    background-image: url('../imagenes/fondo.png');
     background-repeat: repeat;
     background-size: 30% 30%;
 }
@@ -167,7 +167,7 @@ body {
     text-decoration: underline;
     margin-top: 1px;
 }
-.close-modal {
+.closeProd-modal {
     position: fixed;
     top: 25px;
     right: 10px;
@@ -185,7 +185,7 @@ body {
     margin-top: 60px;
     margin-right: 350px;
 }
-.close-modal:hover {
+.closeProd-modal:hover {
     background-color: #e67e00;
 }
 .inicio {
@@ -227,13 +227,16 @@ h2 {
     margin-bottom: 10px;
 }
 .slider {
+    position: relative;
     display: flex;
     transition: transform 0.2s ease-in-out;
     width: 100%;
     height: 100%;
 }
-/*silder*/
-button {
+
+
+/* === Botones del SLIDER (idéntico al estilo original global) === */
+.slider button {
     position: absolute;
     top: 50%;
     background-color: #ff9800;
@@ -244,27 +247,43 @@ button {
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    z-index: 1;
+    z-index: 2;
+    transform: translateY(-50%);
 }
-.prev {
+
+/* Posiciones específicas de los botones */
+.slider .prev {
     left: 10px;
 }
-.next {
+
+.slider .next {
     right: 10px;
 }
-button:hover {
+
+.slider button:hover {
     background-color: #e67e00;
 }
-.close-btn {
+
+/* Botones del slider fuera del contenedor */
+.promociones > .prev,
+.promociones > .next {
     position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ff9800;
+    color: white;
+    font-size: 2rem;
+    border: none;
+    padding: 10px;
     cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    transition: background-color 0.3s ease;
 }
-.close-btn:hover {
-    color: orange;
-}
+
+
+
 #modal-content {
     background: white;
     padding: 20px;
