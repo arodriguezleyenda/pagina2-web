@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (promocionesSection) window.scrollTo({ top: promocionesSection.offsetTop - 50, behavior: 'smooth' });
     });
 
+
     const modal = document.getElementById('product-modal');
     const body = document.body;
 
@@ -521,18 +522,39 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.dropdown-content a, .sub-menu a').forEach(link => {
         link.addEventListener('click', function (event) {
             const subMenu = this.nextElementSibling;
+
+            // Si tiene un submenú, solo lo despliega/oculta
             if (subMenu && subMenu.classList.contains('sub-menu')) {
                 event.preventDefault();
                 subMenu.classList.toggle('active');
                 return;
             }
+
+            // Si es una categoría final
             event.preventDefault();
             const category = this.getAttribute('data-category');
             const categoryProducts = findCategoryProducts(category, productsData);
-            if (categoryProducts) openProductModal(category, categoryProducts);
-            else alert('No hay productos disponibles para esta categoría.');
+
+            if (categoryProducts) {
+                openProductModal(category, categoryProducts);
+
+                // 🔹 Cerrar menú y submenús
+                const navMenu = document.getElementById('nav-menu');
+                if (navMenu) navMenu.classList.remove('show');
+
+                document.querySelectorAll('.sub-menu.active').forEach(menu => {
+                    menu.classList.remove('active');
+                });
+
+                // También cerramos el dropdown principal (por estética)
+                const dropdownContent = document.querySelector('.dropdown-content');
+                if (dropdownContent) dropdownContent.classList.remove('active');
+            } else {
+                alert('No hay productos disponibles para esta categoría.');
+            }
         });
     });
+
 
     document.querySelector('.dropdown-btn')?.addEventListener('click', function (event) {
         event.preventDefault();
