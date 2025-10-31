@@ -5,7 +5,6 @@
 }
 
 @media (min-width: 768px) {
-   /* Animación para deslizar el cuadro desde la derecha */
     @keyframes slideInFromRight {
         0% {
             transform: translateX(200%);
@@ -305,7 +304,7 @@
     }
 
     .sub-menu {
-        display: block;
+        display: none;
         position: relative;
         max-height: 300px;
         max-width: 80%;

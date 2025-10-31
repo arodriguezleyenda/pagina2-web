@@ -582,9 +582,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll('.nav a').forEach(link => {
         link.addEventListener('click', function () {
-            if (!this.classList.contains('dropdown-btn')) navMenu?.classList.remove('show');
+            if (!this.classList.contains('dropdown-btn') && !this.classList.contains('sub-dropdown-btn')) {
+                navMenu?.classList.remove('show');
+            }
         });
     });
+
 
     document.addEventListener('click', function (event) {
         if (!navMenu?.contains(event.target) &&
